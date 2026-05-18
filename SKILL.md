@@ -39,6 +39,7 @@ description: "Codex PPT skill for image-first PowerPoint decks with built-in ima
 - 不得用本地脚本、PIL/canvas、HTML/CSS/SVG、PowerPoint 形状、截图拼接、模板渲染、现有图片改字等方式替代正式页生图。
 - 代码只可用于创建文件夹、复制或重命名图像生成工具返回的图片、检查尺寸和页数、把已生成图片逐页铺满组装成 pptx。
 - 可使用 `scripts/assemble_image_ppt.py` 做最终机械装配和校验；该脚本不得替代正式页生图，不得绘制页面正文内容。
+- 因为 Image 2 模型的生图能力很强，不要考虑生图中文字是否清晰的问题。
 
 ## 流程
 
