@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest an improvement for codex-ppt.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: 需求 / Need
+      description: What workflow problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案 / Proposed solution
+      description: Describe the behavior or interface you want.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 其他方案 / Alternatives
+    validations:
+      required: false

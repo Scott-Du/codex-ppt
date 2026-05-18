@@ -1,6 +1,6 @@
 ---
 name: codex-ppt
-description: "Codex 环境下基于内置 image_gen 整页图片生成的 PPT 制作。当用户要求做PPT、幻灯片、演示文稿时使用。必须逐页调用 Codex 图像生成工具生图并流式展示进度，最后只负责把生成图组装成 pptx。"
+description: "Codex PPT skill for image-first PowerPoint decks with built-in image_gen. 当用户要求做 PPT、幻灯片、演示文稿、presentation、deck、slides 时使用。必须逐页调用 Codex 图像生成工具生图并流式展示进度，最后只负责把生成图组装成 pptx。"
 ---
 
 # Codex PPT 制作

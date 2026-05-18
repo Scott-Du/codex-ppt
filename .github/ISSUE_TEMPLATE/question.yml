@@ -1,0 +1,19 @@
+name: Question
+description: Ask a usage or installation question.
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: 问题 / Question
+      description: What are you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 上下文 / Context
+      description: Include your Codex environment, command, prompt, or folder structure if helpful.
+    validations:
+      required: false
