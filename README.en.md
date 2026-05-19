@@ -6,120 +6,76 @@
 ![PPTX](https://img.shields.io/badge/Output-PPTX-D24726?style=flat-square)
 ![Image First](https://img.shields.io/badge/Image--First-Slides-0A7CFF?style=flat-square)
 
-> 中文版: [README.md](./README.md)
+> 中文版: [README.md](./README.md) · If you are an AI Agent, read: [README.agent.md](./README.agent.md)
 
-`codex-ppt` is a Codex skill for creating image-first PowerPoint decks. Each final slide is generated as a full-page image with Codex's built-in `image_gen`, then mechanically assembled into a `.pptx`.
+`codex-ppt` is a Codex skill for creating image-first PowerPoint decks. Codex generates each slide as a full-page image with the built-in `image_gen`, then mechanically assembles those images into a `.pptx`.
 
-The design lives in the generated slide images. PowerPoint is used as the delivery container.
+The key tradeoff is simple: **the design lives in images; PowerPoint is the delivery container**. This works well for polished delivery decks, not for decks that require long-term editing of every text box, shape, and animation.
 
-## 30-second Start
+## Quick Start
 
-If your environment supports the `skills` CLI:
-
-```bash
-npx skills add https://github.com/Scott-Du/codex-ppt --skill codex-ppt
-```
-
-Or paste this into a Codex / AI agent with shell access:
+If you are a human, ask Codex directly:
 
 ```text
-Install codex-ppt for me. Clone https://github.com/Scott-Du/codex-ppt into $CODEX_HOME/skills/codex-ppt, then verify that SKILL.md and scripts/assemble_image_ppt.py exist.
+Install codex-ppt for me. Install it from https://github.com/Scott-Du/codex-ppt into my Codex skills directory, then verify that SKILL.md and scripts/assemble_image_ppt.py exist.
 ```
 
-Then ask Codex:
+If it is already installed:
 
 ```text
-Use codex-ppt to create a 10-slide image-first pitch deck from this outline.
+Update codex-ppt for me. Go to the codex-ppt skill directory, run git pull, and tell me the latest commit.
 ```
 
-## What It Does
+Then trigger it with:
 
-- Generates each final slide as a full-page image.
-- Saves final slide images as `images/01.png`, `images/02.png`, and so on.
-- Keeps `outline.md` as the single source of truth.
-- Generates `style-preview.png` before full production.
-- Assembles the slide images into a `.pptx` with `scripts/assemble_image_ppt.py`.
-- Supports single-slide redo by archiving the old image and regenerating the selected page.
+```text
+Use codex-ppt to create a 10-slide image-first deck from this outline.
+Turn this project application material into an 8-slide pitch deck with codex-ppt.
+Redo slide 04, archive the old image, keep the new image named 04.png, then reassemble the PPTX.
+```
 
-## Fits / Doesn't Fit
+If you are an AI Agent, read: [README.agent.md](./README.agent.md).
 
-**Fits**
+## When To Use It
+
+Use it for:
 
 - Pitch decks, project application decks, demo day decks
 - Product stories, startup narratives, visual presentations
-- Decks where visual quality matters more than editable PowerPoint objects
+- Decks where visual quality and style consistency matter more than editable PowerPoint objects
 
-**Doesn't fit**
+Avoid it for:
 
-- Dense table-heavy documents
-- Training decks that need lots of editable text
-- Long-term collaborative editing inside PowerPoint
-- Native editable text boxes, shapes, and animations
-
-## Why Image-first PPT
-
-- Full-slide image generation is more stable for visual design.
-- Style consistency is easier when each slide is generated as one composed image.
-- The output is still a `.pptx`, which fits many pitch, review, and application workflows.
-- Edits are explicit: update `outline.md`, regenerate the affected slide, then reassemble.
+- Dense table-heavy documents or text-heavy training decks
+- Decks that require native editable text boxes, shapes, and animations
 
 ## Workflow
 
-The skill guides the agent through:
+1. Confirm title, slide count, audience, scenario, aspect ratio, and output format.
+2. Generate `style-preview.png` to lock the visual direction.
+3. Write `outline.md` as the single source of truth.
+4. Generate slide images one by one as `images/01.png`, `images/02.png`, and so on.
+5. Assemble the images into a `.pptx` with `scripts/assemble_image_ppt.py`.
+6. For a single-slide redo, archive the old image under `images/archive/`, regenerate the same page number, then reassemble.
 
-1. Confirm deck metadata.
-2. Generate and confirm a style preview.
-3. Write and confirm `outline.md`.
-4. Generate slide images one page at a time.
-5. Assemble the final `.pptx`.
-6. Return the work folder, PPTX path, outline path, and images folder.
+During outline writing, the skill favors outward-facing, positive wording and keeps only what the slide needs to show.
 
-## Install
+## Artifacts
 
-### Option 1: skills CLI
+A run usually creates:
 
-```bash
-npx skills add https://github.com/Scott-Du/codex-ppt --skill codex-ppt
+```text
+<DeckTitle>-YYYYMMDD-HHMM/
+├── outline.md
+├── style-preview.png
+├── <DeckTitle>.pptx
+└── images/
+    ├── 01.png
+    ├── 02.png
+    └── archive/
 ```
 
-### Option 2: manual Codex install
-
-```bash
-mkdir -p "$CODEX_HOME/skills"
-git clone https://github.com/Scott-Du/codex-ppt.git "$CODEX_HOME/skills/codex-ppt"
-```
-
-If `CODEX_HOME` is not set:
-
-```bash
-git clone https://github.com/Scott-Du/codex-ppt.git ~/.codex/skills/codex-ppt
-```
-
-Restart Codex or reload skills after installation.
-
-## Trigger Phrases
-
-- "Use codex-ppt to make slides"
-- "Create an image-first PowerPoint deck"
-- "Turn this outline into a 10-slide pitch deck"
-- "调用 codex-ppt skill 做 PPT"
-- "把这个大纲做成 10 页幻灯片"
-
-## Assemble Existing Slide Images
-
-If finished slide images already exist under `images/`, run:
-
-```bash
-python3 scripts/assemble_image_ppt.py \
-  --workdir /absolute/path/to/workdir \
-  --title "Deck Title" \
-  --expected-pages 10 \
-  --ratio 16:9
-```
-
-The script only inserts one full-slide image per PowerPoint page. It does not design, render, or edit slide content.
-
-## Directory
+Repository structure:
 
 ```text
 codex-ppt/
@@ -132,11 +88,19 @@ codex-ppt/
     └── assemble_image_ppt.py
 ```
 
-## Tradeoffs
+## Assemble Existing Images
 
-- The output is image-first, not editable-shape-first.
-- To change slide text or layout, update `outline.md` and regenerate that slide.
-- This skill is optimized for visually polished delivery decks rather than collaborative PowerPoint editing.
+If finished slide images already exist under `images/`, run:
+
+```bash
+python3 scripts/assemble_image_ppt.py \
+  --workdir /absolute/path/to/workdir \
+  --title "Deck Title" \
+  --expected-pages 10 \
+  --ratio 16:9
+```
+
+The script only inserts one full-slide image per PowerPoint page. It does not design, render, or edit slide content.
 
 ## License
 
